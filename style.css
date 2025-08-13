@@ -1,0 +1,281 @@
+:root {
+    --primary-color: #2c3e50;
+    --accent-color: #3498db;
+    --success-color: #2ecc71;
+    --danger-color: #e74c3c;
+    --text-color: #333;
+    --background-color-light: #ecf0f1;
+    --background-color-medium: #bdc3c7;
+}
+
+/* General Layout & Typography */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans Mono', monospace;
+    color: var(--text-color);
+    display: grid;
+    grid-template-rows: 15vh 10vh 68vh 7vh;
+    height: 100vh;
+    box-sizing: border-box;
+    font-size: clamp(1rem, 1.5vw, 2rem);
+}
+
+header, main, section, footer {
+    display: grid;
+    padding: 1vw;
+}
+
+/* Header Section */
+.game-header {
+    background-color: var(--primary-color);
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: center;
+    border-bottom: none;
+    display: grid;
+    color: white;
+}
+
+.header-section {
+    display: flex;
+    align-items: center;
+}
+
+.header-section:first-child {
+    justify-content: flex-start;
+    gap: 1vw;
+}
+
+.header-controls {
+    justify-content: center;
+    gap: 1vw;
+}
+
+.header-logo {
+    justify-content: flex-end;
+    gap: 0.5vw;
+}
+
+/* โลโก้: แสดงสัดส่วนจริง, ไม่ถูกจำกัดในวงกลม และมีการจำกัดขนาดสูงสุด */
+.logo-image {
+    max-width: 75px;
+    height: auto;
+    min-width: 22.5px;
+    min-height: 22.5px;
+    display: block;
+}
+
+/* Countdown Timer */
+.countdown-container {
+    position: relative;
+    width: 6vw;
+    height: 6vw;
+    min-width: 50px;
+    min-height: 50px;
+}
+.countdown-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(90deg) scaleX(-1);
+}
+.countdown-circle {
+    fill: none;
+    stroke: var(--success-color);
+    stroke-width: 12;
+    stroke-dasharray: 263.894;
+    stroke-dashoffset: 0;
+    stroke-linecap: butt;
+    transition: stroke-dashoffset 1s linear;
+}
+.countdown-circle-bg {
+    fill: none;
+    stroke: #333; /* เปลี่ยนค่าสีจาก #666 เป็น #333 เพื่อให้เข้มขึ้นอีก */
+    stroke-width: 12;
+}
+.countdown-text {
+    font-family: 'Noto Sans Mono', monospace;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(0.9rem, 1.8vw, 1.8rem);
+    font-weight: normal;
+    color: white;
+}
+
+/* Main Section - Player Controls */
+.game-main {
+    background-color: var(--background-color-medium);
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    border-bottom: none;
+}
+
+.player-controls {
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+}
+
+.player-controls:first-child {
+    justify-content: flex-start;
+    padding-left: 1vw;
+}
+
+.player-controls:last-child {
+    justify-content: flex-end;
+    padding-right: 1vw;
+}
+
+/* Section - Problem Display */
+.game-problem-display {
+    background-color: #fff;
+    grid-template-columns: 1fr;
+    justify-content: center;
+    align-items: center;
+    border-bottom: none;
+}
+
+#problem-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2vw;
+    padding: 1vw;
+    flex-grow: 1;
+}
+
+.card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 18vw;
+    height: 25vw;
+    min-width: 120px;
+    min-height: 180px;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: clamp(8rem, 22vw, 22rem);
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-weight: bold;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Footer Section - Score Display */
+.game-footer {
+    background-color: var(--primary-color);
+    grid-template-columns: 1fr 1fr;
+    color: white;
+    align-items: center;
+    font-size: clamp(0.75rem, 1.125vw, 1.5rem);
+}
+
+.score-display {
+    display: flex;
+    align-items: center;
+    gap: 2vw;
+}
+
+.score-display:first-child {
+    justify-content: flex-start;
+    padding-left: 1vw;
+}
+
+.score-display:last-child {
+    justify-content: flex-end;
+    padding-right: 1vw;
+}
+
+/* Buttons */
+.btn {
+    padding: 0.75vw 1.5vw;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+    white-space: nowrap;
+    font-family: 'Noto Sans Mono', monospace;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn-primary {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+.btn-success, .btn-danger {
+    min-width: 80px;
+    text-align: center;
+}
+
+.btn-success {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #27ae60;
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+.btn[disabled] {
+    background-color: #ccc;
+    cursor: not-allowed;
+    color: #666;
+}
+
+/* Buttons for Back and Next and Random/New Game button */
+.header-controls .btn {
+    min-width: 150px;
+    text-align: center;
+}
+
+#back-button, #next-button {
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.75vw 1.5vw;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+    white-space: nowrap;
+    font-family: 'Noto Sans Mono', monospace;
+    background-color: var(--accent-color);
+    color: white;
+}
+
+#back-button:hover, #next-button:hover {
+    background-color: #2980b9;
+}
+
+#back-button[disabled], #next-button[disabled] {
+    background-color: #ccc;
+    cursor: not-allowed;
+    color: #666;
+}

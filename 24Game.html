@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The 24 Game</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="game-header">
+        <div class="header-section">
+            <div class="countdown-container">
+                <svg class="countdown-svg" viewBox="0 0 100 100">
+                    <circle class="countdown-circle-bg" cx="50" cy="50" r="42"></circle>
+                    <circle class="countdown-circle" cx="50" cy="50" r="42"></circle>
+                </svg>
+                <div class="countdown-text" id="countdown-timer">30</div>
+            </div>
+            <span id="problem-title">Problem <span id="problem-number">1</span></span>
+        </div>
+
+        <div class="header-section header-controls">
+            <button id="back-button" class="btn">&lt; Back</button>
+            <button id="random-button" class="btn btn-primary">Random Problem</button>
+            <button id="next-button" class="btn">Next &gt;</button>
+        </div>
+
+        <div class="header-section header-logo">
+            <a href="/">
+                <img src="math.png" alt="Math Logo" class="logo-image">
+            </a>
+        </div>
+    </header>
+
+    <main class="game-main">
+        <div class="player-controls">
+            <button id="foul-button-left" class="btn btn-danger">Foul</button>
+            <button id="plus-button-left" class="btn btn-success">+</button>
+        </div>
+        <div class="player-controls">
+            <button id="plus-button-right" class="btn btn-success">+</button>
+            <button id="foul-button-right" class="btn btn-danger">Foul</button>
+        </div>
+    </main>
+
+    <section class="game-problem-display">
+        <div id="problem-area">
+        </div>
+    </section>
+
+    <footer class="game-footer">
+        <div class="score-display">
+            <span>Score: <span id="score-left">0</span></span>
+            <span>Fouls: <span id="foul-left">0</span></span>
+        </div>
+        <div class="score-display">
+            <span>Score: <span id="score-right">0</span></span>
+            <span>Fouls: <span id="foul-right">0</span></span>
+        </div>
+    </footer>
+
+    <script src="problems.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
