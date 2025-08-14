@@ -10,7 +10,6 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-
 // Game state variables
 let currentProblem = 1;
 const totalProblems = 15;
