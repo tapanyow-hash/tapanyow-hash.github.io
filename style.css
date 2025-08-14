@@ -34,11 +34,14 @@ header, main, section, footer {
     border-bottom: none;
     display: grid;
     color: white;
+    padding-left: 1vw;
+    padding-right: 1vw;
 }
 
 .header-section {
     display: flex;
     align-items: center;
+    font-size: clamp(0.7rem, 1.2vw, 1.5rem);
 }
 
 .header-section:first-child {
@@ -56,12 +59,9 @@ header, main, section, footer {
     gap: 0.5vw;
 }
 
-/* โลโก้: แสดงสัดส่วนจริง, ไม่ถูกจำกัดในวงกลม และมีการจำกัดขนาดสูงสุด */
 .logo-image {
-    max-width: 75px;
+    width: 5vw;
     height: auto;
-    min-width: 22.5px;
-    min-height: 22.5px;
     display: block;
 }
 
@@ -70,8 +70,6 @@ header, main, section, footer {
     position: relative;
     width: 6vw;
     height: 6vw;
-    min-width: 50px;
-    min-height: 50px;
 }
 .countdown-svg {
     width: 100%;
@@ -89,7 +87,7 @@ header, main, section, footer {
 }
 .countdown-circle-bg {
     fill: none;
-    stroke: #333; /* เปลี่ยนค่าสีจาก #666 เป็น #333 เพื่อให้เข้มขึ้นอีก */
+    stroke: #333;
     stroke-width: 12;
 }
 .countdown-text {
@@ -106,9 +104,11 @@ header, main, section, footer {
 /* Main Section - Player Controls */
 .game-main {
     background-color: var(--background-color-medium);
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
     border-bottom: none;
+    padding: 1vw;
 }
 
 .player-controls {
@@ -117,14 +117,11 @@ header, main, section, footer {
     gap: 1vw;
 }
 
-.player-controls:first-child {
-    justify-content: flex-start;
-    padding-left: 1vw;
-}
-
-.player-controls:last-child {
-    justify-content: flex-end;
-    padding-right: 1vw;
+#initial-message {
+    text-align: center;
+    font-size: clamp(1rem, 2vw, 2.5rem);
+    color: #666;
+    flex-grow: 1;
 }
 
 /* Section - Problem Display */
@@ -151,8 +148,6 @@ header, main, section, footer {
     align-items: center;
     width: 18vw;
     height: 25vw;
-    min-width: 120px;
-    min-height: 180px;
     background-color: var(--primary-color);
     color: white;
     font-size: clamp(8rem, 22vw, 22rem);
@@ -175,6 +170,8 @@ header, main, section, footer {
     color: white;
     align-items: center;
     font-size: clamp(0.75rem, 1.125vw, 1.5rem);
+    padding-left: 1vw;
+    padding-right: 1vw;
 }
 
 .score-display {
@@ -185,42 +182,37 @@ header, main, section, footer {
 
 .score-display:first-child {
     justify-content: flex-start;
-    padding-left: 1vw;
 }
 
 .score-display:last-child {
     justify-content: flex-end;
-    padding-right: 1vw;
 }
 
-/* Buttons */
+/* Buttons (รวมสไตล์ปุ่มทั้งหมดเพื่อให้สอดคล้องกัน) */
 .btn {
     padding: 0.75vw 1.5vw;
-    font-size: 1rem;
+    font-size: clamp(0.7rem, 1.2vw, 1.5rem);
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.1s;
     white-space: nowrap;
     font-family: 'Noto Sans Mono', monospace;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 8vw;
 }
 
 .btn:active {
     transform: scale(0.98);
 }
 
+/* สไตล์สีปุ่ม */
 .btn-primary {
     background-color: var(--accent-color);
     color: white;
-}
-
-.btn-primary:hover {
-    background-color: #2980b9;
-}
-
-.btn-success, .btn-danger {
-    min-width: 80px;
-    text-align: center;
 }
 
 .btn-success {
@@ -228,54 +220,35 @@ header, main, section, footer {
     color: white;
 }
 
-.btn-success:hover {
-    background-color: #27ae60;
-}
-
 .btn-danger {
     background-color: var(--danger-color);
     color: white;
 }
 
+/* สไตล์ Hover */
+.btn:hover {
+    filter: brightness(1.2);
+}
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+.btn-success:hover {
+    background-color: #27ae60;
+}
 .btn-danger:hover {
     background-color: #c0392b;
 }
 
+/* ปุ่มที่ถูกปิดใช้งาน (Disabled) */
 .btn[disabled] {
     background-color: #ccc;
     cursor: not-allowed;
     color: #666;
+    filter: none;
 }
 
-/* Buttons for Back and Next and Random/New Game button */
-.header-controls .btn {
-    min-width: 150px;
-    text-align: center;
-}
-
-#back-button, #next-button {
-    text-decoration: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0.75vw 1.5vw;
-    font-size: 1rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.1s;
-    white-space: nowrap;
-    font-family: 'Noto Sans Mono', monospace;
-    background-color: var(--accent-color);
-    color: white;
-}
-
-#back-button:hover, #next-button:hover {
-    background-color: #2980b9;
-}
-
-#back-button[disabled], #next-button[disabled] {
-    background-color: #ccc;
-    cursor: not-allowed;
-    color: #666;
+/* สไตล์เฉพาะสำหรับปุ่ม Random ที่มีข้อความยาวขึ้น */
+.random-button-long-text {
+    padding: 0.75vw 0.5vw;
+    font-size: clamp(0.6rem, 0.9vw, 1.2rem);
 }
