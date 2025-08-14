@@ -1,6 +1,6 @@
 const CACHE_NAME = '24-game-cache-v1';
 const urlsToCache = [
-  '/',
+  '/', // เพิ่ม / เพื่อระบุว่าหน้าแรกของโดเมนก็ควรถูกแคชด้วย
   '/index.html',
   '/style.css',
   '/script.js',

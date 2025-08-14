@@ -2,7 +2,7 @@
   "name": "The 24 Game",
   "short_name": "24 Game",
   "description": "A competitive game to find solutions for a set of four numbers that equal 24.",
-  "start_url": "./index.html",
+  "start_url": ".",  
   "display": "standalone",
   "background_color": "#ecf0f1",
   "theme_color": "#2c3e50",
