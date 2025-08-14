@@ -10,7 +10,7 @@ let isExtraRound = false;
 let problems = [];
 let mainProblems = [];
 let allUsedProblems = new Set();
-let isFirstProblemRandomized = false; // New: Flag for the first problem
+let isFirstProblemRandomized = false;
 
 // DOM element references
 const problemNumberElement = document.getElementById('problem-number');
@@ -344,17 +344,26 @@ function nextProblem() {
 
 function previousProblem() {
     if (gameEnded) return;
-    if (!isFirstProblemRandomized) return;
-    
+
     if (currentProblem > 1) {
         currentProblem--;
+        updateProblemDisplay();
+        clearProblemCards();
+        resetTimerDisplay();
     }
+}
+
+backButton.addEventListener('click', () => {
+    if (gameEnded || !isFirstProblemRandomized || currentProblem <= 1) {
+        return;
+    }
+    
+    replaceCurrentProblem();
+    currentProblem--;
     updateProblemDisplay();
     clearProblemCards();
     resetTimerDisplay();
-}
-
-backButton.addEventListener('click', previousProblem);
+});
 nextButton.addEventListener('click', nextProblem);
 
 plusButtonLeft.addEventListener('click', () => {
