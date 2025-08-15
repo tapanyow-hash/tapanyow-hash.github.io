@@ -23,6 +23,7 @@ let problems = [];
 let mainProblems = [];
 let allUsedProblems = new Set();
 let isFirstProblemRandomized = false;
+let scoreHistory = []; // เพิ่ม: อาร์เรย์สำหรับเก็บประวัติคะแนน
 
 // DOM element references
 const problemNumberElement = document.getElementById('problem-number');
@@ -365,11 +366,22 @@ function previousProblem() {
     }
 }
 
+// **แก้ไข** ส่วนการทำงานของปุ่ม Back
 backButton.addEventListener('click', () => {
-    if (gameEnded || !isFirstProblemRandomized || currentProblem <= 1) {
+    if (gameEnded || currentProblem <= 1 || scoreHistory.length === 0) {
         return;
     }
     
+    // ดึงสถานะล่าสุดจากประวัติ
+    const lastState = scoreHistory.pop();
+    scoreLeft = lastState.scoreLeft;
+    foulLeft = lastState.foulLeft;
+    scoreRight = lastState.scoreRight;
+    foulRight = lastState.foulRight;
+    
+    updateScores();
+    
+    // ย้อนกลับไปโจทย์ก่อนหน้า
     replaceCurrentProblem();
     currentProblem--;
     updateProblemDisplay();
@@ -378,8 +390,10 @@ backButton.addEventListener('click', () => {
 });
 nextButton.addEventListener('click', nextProblem);
 
+// **แก้ไข** ส่วนการทำงานของปุ่ม + และ Foul เพื่อบันทึกประวัติก่อนการเปลี่ยนแปลง
 plusButtonLeft.addEventListener('click', () => {
     if (gameEnded) return;
+    scoreHistory.push({ scoreLeft, foulLeft, scoreRight, foulRight }); // บันทึกสถานะก่อนการเปลี่ยนแปลง
     scoreLeft++;
     updateScores();
     nextProblem();
@@ -387,6 +401,7 @@ plusButtonLeft.addEventListener('click', () => {
 
 foulButtonLeft.addEventListener('click', () => {
     if (gameEnded) return;
+    scoreHistory.push({ scoreLeft, foulLeft, scoreRight, foulRight }); // บันทึกสถานะก่อนการเปลี่ยนแปลง
     foulLeft++;
     updateScores();
     nextProblem();
@@ -394,6 +409,7 @@ foulButtonLeft.addEventListener('click', () => {
 
 plusButtonRight.addEventListener('click', () => {
     if (gameEnded) return;
+    scoreHistory.push({ scoreLeft, foulLeft, scoreRight, foulRight }); // บันทึกสถานะก่อนการเปลี่ยนแปลง
     scoreRight++;
     updateScores();
     nextProblem();
@@ -401,6 +417,7 @@ plusButtonRight.addEventListener('click', () => {
 
 foulButtonRight.addEventListener('click', () => {
     if (gameEnded) return;
+    scoreHistory.push({ scoreLeft, foulLeft, scoreRight, foulRight }); // บันทึกสถานะก่อนการเปลี่ยนแปลง
     foulRight++;
     updateScores();
     nextProblem();
@@ -413,6 +430,8 @@ function randomizeProblem() {
         generateRandomProblems(); // Generate all problems at once
         isFirstProblemRandomized = true;
     } else {
+        // เมื่อมีการสุ่มใหม่หลังจากเริ่มเกม ให้บันทึกสถานะก่อนการสุ่ม
+        scoreHistory.push({ scoreLeft, foulLeft, scoreRight, foulRight });
         replaceCurrentProblem();
     }
 

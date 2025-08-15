@@ -1,14 +1,12 @@
-const CACHE_NAME = '24-game-cache-v1';
+const CACHE_NAME = '24-game-cache-v2';
 const urlsToCache = [
-  '/', // เพิ่ม / เพื่อระบุว่าหน้าแรกของโดเมนก็ควรถูกแคชด้วย
+  '/',
   '/index.html',
   '/style.css',
   '/script.js',
   '/problems.js',
-  '/manifest.json',
   '/math.png',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png',
+  '/manifest.json',
   'https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&display=swap'
 ];
 
@@ -26,9 +24,11 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
       .then(response => {
+        // Cache-first strategy: ตอบกลับจาก cache หากมี
         if (response) {
           return response;
         }
+        // หากไม่มีใน cache ให้ไปเรียกจาก network
         return fetch(event.request);
       })
   );
