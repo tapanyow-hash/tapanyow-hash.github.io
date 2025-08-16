@@ -7,11 +7,9 @@
   "theme_color": "#2c3e50",
   "icons": [
     {
-      "src": "math.png",
-      "sizes": "70x80",
+      "src": "icon.png",
+      "sizes": "580x580",
       "type": "image/png"
     }
   ]
 }
-
-

@@ -6,6 +6,7 @@ const urlsToCache = [
   "./script.js",
   "./problems.js",
   "./math.png",
+  "./icon.png",
   "./manifest.json",
   "./NotoSansMono-VariableFont_wdth,wght.ttf"
 ];
@@ -42,4 +43,3 @@ self.addEventListener("activate", event => {
     )
   );
 });
-
