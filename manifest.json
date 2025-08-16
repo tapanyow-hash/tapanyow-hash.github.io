@@ -7,7 +7,12 @@
       "sizes": "1920x1080",
       "type": "image/png",
       "form_factor": "wide"
-    }
+    },
+    {
+      "src": "iPad-Mini.png",
+      "sizes": "768x1024",
+      "type": "image/png"
+    }    
   ],
   "start_url": "/index.html",
   "display": "standalone",
