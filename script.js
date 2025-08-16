@@ -23,7 +23,7 @@ let problems = [];
 let mainProblems = [];
 let allUsedProblems = new Set();
 let isFirstProblemRandomized = false;
-let scoreHistory = []; // เพิ่ม: อาร์เรย์สำหรับเก็บประวัติคะแนน
+let scoreHistory = [];
 
 // DOM element references
 const problemNumberElement = document.getElementById('problem-number');
@@ -32,6 +32,7 @@ const backButton = document.getElementById('back-button');
 const nextButton = document.getElementById('next-button');
 const randomButton = document.getElementById('random-button');
 const problemArea = document.getElementById('problem-area');
+const logo = document.getElementById('logo'); // อ้างอิง DOM element ของโลโก้
 
 // Score and Foul display elements
 const scoreLeftElement = document.getElementById('score-left');
@@ -56,10 +57,6 @@ const totalTime = 30;
 let remainingTime = totalTime;
 let remainingTimeRing;
 let randomizeInterval;
-
-// The problemsT and problemsF arrays should be loaded from problems.js
-// If you are using the update-problems.html, this part will be handled automatically.
-// Make sure problems.js is in the same directory and included in your HTML file.
 
 function shuffleArray(array) {
     const newArray = [...array];
@@ -110,7 +107,6 @@ function replaceCurrentProblem() {
     const currentProblemIndex = currentProblem - 1;
     const oldProblem = problems[currentProblemIndex];
     
-    // We need to find the original problem array to remove it from allUsedProblems
     let originalProblem = problemsT.find(p => p.join('') === oldProblem.sort().join('')) || problemsF.find(p => p.join('') === oldProblem.sort().join(''));
     if (originalProblem) {
         allUsedProblems.delete(JSON.stringify(originalProblem));
@@ -132,10 +128,9 @@ function replaceCurrentProblem() {
     }
     
     if (newProblem) {
-        problems[currentProblemIndex] = shuffleArray(newProblem); // Shuffle the new problem
+        problems[currentProblemIndex] = shuffleArray(newProblem);
         allUsedProblems.add(JSON.stringify(newProblem));
     } else {
-        // If no new problem is found, put the old one back
         allUsedProblems.add(JSON.stringify(originalProblem));
     }
 }
@@ -366,13 +361,11 @@ function previousProblem() {
     }
 }
 
-// **แก้ไข** ส่วนการทำงานของปุ่ม Back
 backButton.addEventListener('click', () => {
     if (gameEnded || currentProblem <= 1 || scoreHistory.length === 0) {
         return;
     }
     
-    // ดึงสถานะล่าสุดจากประวัติ
     const lastState = scoreHistory.pop();
     scoreLeft = lastState.scoreLeft;
     foulLeft = lastState.foulLeft;
@@ -381,7 +374,6 @@ backButton.addEventListener('click', () => {
     
     updateScores();
     
-    // ย้อนกลับไปโจทย์ก่อนหน้า
     replaceCurrentProblem();
     currentProblem--;
     updateProblemDisplay();
@@ -390,10 +382,9 @@ backButton.addEventListener('click', () => {
 });
 nextButton.addEventListener('click', nextProblem);
 
-// **แก้ไข** ส่วนการทำงานของปุ่ม + และ Foul เพื่อบันทึกประวัติก่อนการเปลี่ยนแปลง
 plusButtonLeft.addEventListener('click', () => {
     if (gameEnded) return;
-    scoreHistory.push({ scoreLeft, foulLeft, scoreRight, foulRight }); // บันทึกสถานะก่อนการเปลี่ยนแปลง
+    scoreHistory.push({ scoreLeft, foulLeft, scoreRight, foulRight });
     scoreLeft++;
     updateScores();
     nextProblem();
@@ -401,7 +392,7 @@ plusButtonLeft.addEventListener('click', () => {
 
 foulButtonLeft.addEventListener('click', () => {
     if (gameEnded) return;
-    scoreHistory.push({ scoreLeft, foulLeft, scoreRight, foulRight }); // บันทึกสถานะก่อนการเปลี่ยนแปลง
+    scoreHistory.push({ scoreLeft, foulLeft, scoreRight, foulRight });
     foulLeft++;
     updateScores();
     nextProblem();
@@ -409,7 +400,7 @@ foulButtonLeft.addEventListener('click', () => {
 
 plusButtonRight.addEventListener('click', () => {
     if (gameEnded) return;
-    scoreHistory.push({ scoreLeft, foulLeft, scoreRight, foulRight }); // บันทึกสถานะก่อนการเปลี่ยนแปลง
+    scoreHistory.push({ scoreLeft, foulLeft, scoreRight, foulRight });
     scoreRight++;
     updateScores();
     nextProblem();
@@ -417,7 +408,7 @@ plusButtonRight.addEventListener('click', () => {
 
 foulButtonRight.addEventListener('click', () => {
     if (gameEnded) return;
-    scoreHistory.push({ scoreLeft, foulLeft, scoreRight, foulRight }); // บันทึกสถานะก่อนการเปลี่ยนแปลง
+    scoreHistory.push({ scoreLeft, foulLeft, scoreRight, foulRight });
     foulRight++;
     updateScores();
     nextProblem();
@@ -427,10 +418,9 @@ function randomizeProblem() {
     if (gameEnded) return;
 
     if (!isFirstProblemRandomized) {
-        generateRandomProblems(); // Generate all problems at once
+        generateRandomProblems();
         isFirstProblemRandomized = true;
     } else {
-        // เมื่อมีการสุ่มใหม่หลังจากเริ่มเกม ให้บันทึกสถานะก่อนการสุ่ม
         scoreHistory.push({ scoreLeft, foulLeft, scoreRight, foulRight });
         replaceCurrentProblem();
     }
@@ -472,6 +462,20 @@ randomButton.addEventListener('click', randomizeProblem);
 function displayInitialProblem() {
     clearProblemCards();
 }
+
+// **ฟังก์ชันสำหรับสลับโหมด Full Screen**
+function toggleFullScreen() {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+            console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+        });
+    } else {
+        document.exitFullscreen();
+    }
+}
+
+// **เพิ่ม Event Listener ให้กับโลโก้**
+logo.addEventListener('click', toggleFullScreen);
 
 document.addEventListener('DOMContentLoaded', () => {
     displayInitialProblem();

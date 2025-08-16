@@ -1,4 +1,4 @@
-const CACHE_NAME = '24-game-cache-v2';
+const CACHE_NAME = '24-game-cache-v3';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -24,11 +24,9 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
       .then(response => {
-        // Cache-first strategy: ตอบกลับจาก cache หากมี
         if (response) {
           return response;
         }
-        // หากไม่มีใน cache ให้ไปเรียกจาก network
         return fetch(event.request);
       })
   );
