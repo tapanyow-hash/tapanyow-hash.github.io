@@ -8,8 +8,9 @@
   "icons": [
     {
       "src": "math.png",
-      "sizes": "256x256",
+      "sizes": "70x80",
       "type": "image/png"
     }
   ]
 }
+
