@@ -6,7 +6,8 @@ const urlsToCache = [
   "./script.js",
   "./problems.js",
   "./math.png",
-  "./manifest.json"
+  "./manifest.json",
+  "./NotoSansMono-VariableFont_wdth,wght.ttf"
 ];
 
 // ติดตั้ง Service Worker และ cache ไฟล์
@@ -41,3 +42,4 @@ self.addEventListener("activate", event => {
     )
   );
 });
+
