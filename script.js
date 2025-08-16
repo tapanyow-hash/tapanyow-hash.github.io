@@ -1,13 +1,13 @@
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js')
-      .then(registration => {
-        console.log('Service Worker registered with scope:', registration.scope);
-      })
-      .catch(err => {
-        console.log('Service Worker registration failed: ', err);
-      });
-  });
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./service-worker.js')
+        .then(registration => {
+          console.log('Service Worker registered with scope:', registration.scope);
+        })
+        .catch(err => {
+          console.log('Service Worker registration failed: ', err);
+        });
+    });
 }
 
 // Game state variables
@@ -361,25 +361,22 @@ function previousProblem() {
     }
 }
 
+// **แก้ไข Event Listener ของปุ่ม Back**
 backButton.addEventListener('click', () => {
-    if (gameEnded || currentProblem <= 1 || scoreHistory.length === 0) {
-        return;
+    // โค้ดที่เพิ่มเข้ามา: ลดเลขโจทย์โดยตรง
+    previousProblem();
+
+    // ส่วนโค้ดเดิมที่ใช้สำหรับ History ของคะแนน
+    if (scoreHistory.length > 0) {
+        const lastState = scoreHistory.pop();
+        scoreLeft = lastState.scoreLeft;
+        foulLeft = lastState.foulLeft;
+        scoreRight = lastState.scoreRight;
+        foulRight = lastState.foulRight;
+        updateScores();
     }
-    
-    const lastState = scoreHistory.pop();
-    scoreLeft = lastState.scoreLeft;
-    foulLeft = lastState.foulLeft;
-    scoreRight = lastState.scoreRight;
-    foulRight = lastState.foulRight;
-    
-    updateScores();
-    
-    replaceCurrentProblem();
-    currentProblem--;
-    updateProblemDisplay();
-    clearProblemCards();
-    resetTimerDisplay();
 });
+
 nextButton.addEventListener('click', nextProblem);
 
 plusButtonLeft.addEventListener('click', () => {
