@@ -3,7 +3,7 @@
   "short_name": "24 Game",
   "screenshots": [
     {
-      "src": "short 1920x1080.png",
+      "src": "short1920x1080.png",
       "sizes": "1920x1080",
       "type": "image/png",
       "form_factor": "wide"
@@ -21,3 +21,4 @@
     }
   ]
 }
+
