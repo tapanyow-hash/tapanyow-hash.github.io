@@ -1,7 +1,7 @@
 @font-face {
     font-family: 'Noto Sans Mono';
     src: url('NotoSansMono-VariableFont_wdth,wght.ttf') format('truetype');
-    font-weight: 100 900;
+    font-weight: 100 900; /* variable font รองรับทุกน้ำหนัก */
     font-style: normal;
 }
 
@@ -26,7 +26,6 @@ body {
     height: 100vh;
     box-sizing: border-box;
     font-size: clamp(1rem, 1.5vw, 2rem);
-    /* ลบ padding ที่ซ้ำซ้อนใน body ออกไปแล้ว */
 }
 
 header, main, section, footer {
@@ -44,9 +43,6 @@ header, main, section, footer {
     color: white;
     padding-left: 1vw;
     padding-right: 1vw;
-    
-    /* แก้ไข padding สำหรับ Safe Area ด้านบน */
-    padding-top: env(safe-area-inset-top, 1vw);
 }
 
 .header-section {
@@ -183,9 +179,6 @@ header, main, section, footer {
     font-size: clamp(0.75rem, 1.125vw, 1.5rem);
     padding-left: 1vw;
     padding-right: 1vw;
-    
-    /* แก้ไข padding สำหรับ Safe Area ด้านล่าง */
-    padding-bottom: env(safe-area-inset-bottom, 1vw);
 }
 
 .score-display {

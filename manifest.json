@@ -24,9 +24,5 @@
       "sizes": "580x580",
       "type": "image/png"
     }
-  ],
-  "display_override": [
-    "fullscreen",
-    "minimal-ui"
   ]
 }
