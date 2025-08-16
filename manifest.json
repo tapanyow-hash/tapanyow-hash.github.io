@@ -1,6 +1,14 @@
 {
   "name": "The 24 Game",
   "short_name": "24 Game",
+  "screenshots": [
+    {
+      "src": "short 1920x1080.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
   "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#ecf0f1",
