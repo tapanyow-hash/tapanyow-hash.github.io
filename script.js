@@ -474,8 +474,20 @@ function toggleFullScreen() {
 // **เพิ่ม Event Listener ให้กับโลโก้**
 logo.addEventListener('click', toggleFullScreen);
 
+// **ฟังก์ชันใหม่สำหรับเริ่ม Full Screen อัตโนมัติเมื่อโปรแกรมโหลดเสร็จ**
+function enterFullScreenOnLoad() {
+    try {
+        toggleFullScreen();
+    } catch (err) {
+        console.error("Failed to enter full-screen mode automatically.", err);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     displayInitialProblem();
     updateProblemDisplay();
     updateScores();
+    
+    // **เพิ่มโค้ดบรรทัดนี้เพื่อเรียกใช้ฟังก์ชัน Full Screen เมื่อหน้าจอพร้อม**
+    enterFullScreenOnLoad();
 });
