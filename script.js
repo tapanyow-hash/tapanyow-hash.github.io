@@ -361,8 +361,12 @@ function previousProblem() {
     }
 }
 
+// **แก้ไข Event Listener ของปุ่ม Back**
 backButton.addEventListener('click', () => {
+    // โค้ดที่เพิ่มเข้ามา: ลดเลขโจทย์โดยตรง
     previousProblem();
+
+    // ส่วนโค้ดเดิมที่ใช้สำหรับ History ของคะแนน
     if (scoreHistory.length > 0) {
         const lastState = scoreHistory.pop();
         scoreLeft = lastState.scoreLeft;
@@ -470,26 +474,8 @@ function toggleFullScreen() {
 // **เพิ่ม Event Listener ให้กับโลโก้**
 logo.addEventListener('click', toggleFullScreen);
 
-// **เพิ่มฟังก์ชันใหม่เพื่อสั่ง Full Screen เมื่อโหลดหน้าเว็บ**
-function requestFullScreenOnLoad() {
-    const docElem = document.documentElement;
-    if (docElem.requestFullscreen) {
-        docElem.requestFullscreen();
-    } else if (docElem.webkitRequestFullscreen) { /* Safari */
-        docElem.webkitRequestFullscreen();
-    } else if (docElem.msRequestFullscreen) { /* IE11 */
-        docElem.msRequestFullscreen();
-    }
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     displayInitialProblem();
     updateProblemDisplay();
     updateScores();
-});
-
-// เรียกใช้ฟังก์ชัน Full Screen เมื่อหน้าเว็บโหลดเสร็จ
-window.addEventListener('load', () => {
-    // หน่วงเวลา 1 วินาทีเพื่อให้แน่ใจว่า DOM พร้อมแล้ว
-    setTimeout(requestFullScreenOnLoad, 1000); 
 });
