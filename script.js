@@ -19,11 +19,14 @@ let scoreRight = 0;
 let foulRight = 0;
 let gameEnded = false;
 let isExtraRound = false;
-let problems = [];
-let mainProblems = [];
+let problemLabel = [];
+let extraProblemLabel = [];
+let problemsF_pool = [];
+let problemsT_pool = [];
 let allUsedProblems = new Set();
 let isFirstProblemRandomized = false;
 let scoreHistory = [];
+let needsRelabel = false; // New state variable to track if a relabel is needed
 
 // DOM element references
 const problemNumberElement = document.getElementById('problem-number');
@@ -32,7 +35,7 @@ const backButton = document.getElementById('back-button');
 const nextButton = document.getElementById('next-button');
 const randomButton = document.getElementById('random-button');
 const problemArea = document.getElementById('problem-area');
-const logo = document.getElementById('logo'); // อ้างอิง DOM element ของโลโก้
+const logo = document.getElementById('logo');
 
 // Score and Foul display elements
 const scoreLeftElement = document.getElementById('score-left');
@@ -67,72 +70,57 @@ function shuffleArray(array) {
     return newArray;
 }
 
-function generateRandomProblems() {
-    if (isExtraRound) {
-        const problemsT_filtered = problemsT.filter(p => !allUsedProblems.has(JSON.stringify(p)));
-        const problemsF_filtered = problemsF.filter(p => !allUsedProblems.has(JSON.stringify(p)));
-        
-        const problemsT_shuffled = shuffleArray(problemsT_filtered);
-        const problemsF_shuffled = shuffleArray(problemsF_filtered);
-        let extraProblems = [];
-        
-        if (problemsF_shuffled.length > 0 && Math.random() > 0.5) {
-            extraProblems.push(problemsF_shuffled.pop());
-        }
-        
-        while (extraProblems.length < 3 && problemsT_shuffled.length > 0) {
-            extraProblems.push(problemsT_shuffled.pop());
-        }
-
-        problems = shuffleArray(extraProblems).map(p => shuffleArray(p));
-        extraProblems.forEach(p => allUsedProblems.add(JSON.stringify(p)));
-    } else {
-        const problemsT_shuffled = shuffleArray([...problemsT]);
-        const selectedProblemsT = problemsT_shuffled.slice(0, 12);
-        
-        const problemsF_shuffled = shuffleArray([...problemsF]);
-        const selectedProblemsF = problemsF_shuffled.slice(0, 3);
-        
-        let combinedProblems = [...selectedProblemsT, ...selectedProblemsF];
-        
-        // Shuffle the numbers within each problem array
-        problems = shuffleArray(combinedProblems).map(p => shuffleArray(p));
-        
-        mainProblems = problems;
-        combinedProblems.forEach(p => allUsedProblems.add(JSON.stringify(p)));
-    }
+function resetProblemPools() {
+    problemsF_pool = shuffleArray([...problemsF]);
+    problemsT_pool = shuffleArray([...problemsT]);
 }
 
-function replaceCurrentProblem() {
-    const currentProblemIndex = currentProblem - 1;
-    const oldProblem = problems[currentProblemIndex];
-    
-    let originalProblem = problemsT.find(p => p.join('') === oldProblem.sort().join('')) || problemsF.find(p => p.join('') === oldProblem.sort().join(''));
-    if (originalProblem) {
-        allUsedProblems.delete(JSON.stringify(originalProblem));
+function generateLabel() {
+    let fCount = 3;
+    let tCount = 12;
+    problemLabel = [];
+    for (let i = 0; i < fCount; i++) {
+        problemLabel.push(true); // true = problemsF
     }
-    
-    let newProblem;
-    const isOldProblemFromF = problemsF.some(p => p.join('') === originalProblem.join(''));
-    
-    if (isOldProblemFromF) {
-        const problemsF_filtered = problemsF.filter(p => !allUsedProblems.has(JSON.stringify(p)));
-        if (problemsF_filtered.length > 0) {
-            newProblem = problemsF_filtered[Math.floor(Math.random() * problemsF_filtered.length)];
-        }
+    for (let i = 0; i < tCount; i++) {
+        problemLabel.push(false); // false = problemsT
+    }
+    problemLabel = shuffleArray(problemLabel);
+}
+
+function handleExtraRound() {
+    let fCount = Math.random() > 0.5 ? 1 : 0;
+    let tCount = 3 - fCount;
+    extraProblemLabel = [];
+    for (let i = 0; i < fCount; i++) {
+        extraProblemLabel.push(true);
+    }
+    for (let i = 0; i < tCount; i++) {
+        extraProblemLabel.push(false);
+    }
+    extraProblemLabel = shuffleArray(extraProblemLabel);
+}
+
+function getNextProblem() {
+    let problem;
+    let isFromF;
+    if (isExtraRound) {
+        isFromF = extraProblemLabel[currentProblem - 1];
     } else {
-        const problemsT_filtered = problemsT.filter(p => !allUsedProblems.has(JSON.stringify(p)));
-        if (problemsT_filtered.length > 0) {
-            newProblem = problemsT_filtered[Math.floor(Math.random() * problemsT_filtered.length)];
+        isFromF = problemLabel[currentProblem - 1];
+    }
+    if (isFromF) {
+        if (problemsF_pool.length === 0) {
+            resetProblemPools();
         }
-    }
-    
-    if (newProblem) {
-        problems[currentProblemIndex] = shuffleArray(newProblem);
-        allUsedProblems.add(JSON.stringify(newProblem));
+        problem = problemsF_pool.shift();
     } else {
-        allUsedProblems.add(JSON.stringify(originalProblem));
+        if (problemsT_pool.length === 0) {
+            resetProblemPools();
+        }
+        problem = problemsT_pool.shift();
     }
+    return shuffleArray(problem);
 }
 
 function updateCountdownTimer() {
@@ -141,7 +129,6 @@ function updateCountdownTimer() {
     countdownText.textContent = remainingTime;
     const dashOffset = circumference * (1 - remainingTimeRing / (totalTime - 1));
     countdownCircle.style.strokeDashoffset = dashOffset;
-    
     if (remainingTime <= 0) {
         clearInterval(timerInterval);
         countdownText.textContent = '0';
@@ -320,12 +307,11 @@ function resetTimerDisplay() {
 
 function nextProblem() {
     if (gameEnded) return;
-        
     if (!isExtraRound && currentProblem >= totalProblems) {
         if (scoreLeft === scoreRight) {
             isExtraRound = true;
             currentProblem = 1;
-            generateRandomProblems();
+            handleExtraRound();
             updateProblemDisplay();
             clearProblemCards();
             resetTimerDisplay();
@@ -335,7 +321,7 @@ function nextProblem() {
     } else if (isExtraRound && currentProblem >= 3) {
         if (scoreLeft === scoreRight) {
             currentProblem = 1;
-            generateRandomProblems();
+            handleExtraRound();
             updateProblemDisplay();
             clearProblemCards();
             resetTimerDisplay();
@@ -352,21 +338,18 @@ function nextProblem() {
 
 function previousProblem() {
     if (gameEnded) return;
-
     if (currentProblem > 1) {
         currentProblem--;
         updateProblemDisplay();
         clearProblemCards();
         resetTimerDisplay();
+        needsRelabel = true; // Set the flag when back is pressed
     }
 }
 
 // **แก้ไข Event Listener ของปุ่ม Back**
 backButton.addEventListener('click', () => {
-    // โค้ดที่เพิ่มเข้ามา: ลดเลขโจทย์โดยตรง
     previousProblem();
-
-    // ส่วนโค้ดเดิมที่ใช้สำหรับ History ของคะแนน
     if (scoreHistory.length > 0) {
         const lastState = scoreHistory.pop();
         scoreLeft = lastState.scoreLeft;
@@ -377,7 +360,9 @@ backButton.addEventListener('click', () => {
     }
 });
 
-nextButton.addEventListener('click', nextProblem);
+nextButton.addEventListener('click', () => {
+    nextProblem();
+});
 
 plusButtonLeft.addEventListener('click', () => {
     if (gameEnded) return;
@@ -413,21 +398,26 @@ foulButtonRight.addEventListener('click', () => {
 
 function randomizeProblem() {
     if (gameEnded) return;
-
     if (!isFirstProblemRandomized) {
-        generateRandomProblems();
+        resetProblemPools();
+        generateLabel();
         isFirstProblemRandomized = true;
-    } else {
-        scoreHistory.push({ scoreLeft, foulLeft, scoreRight, foulRight });
-        replaceCurrentProblem();
+    } else if (needsRelabel) {
+        let labelToShuffle;
+        if (isExtraRound) {
+            labelToShuffle = extraProblemLabel.slice(currentProblem - 1);
+            extraProblemLabel = [...extraProblemLabel.slice(0, currentProblem - 1), ...shuffleArray(labelToShuffle)];
+        } else {
+            labelToShuffle = problemLabel.slice(currentProblem - 1);
+            problemLabel = [...problemLabel.slice(0, currentProblem - 1), ...shuffleArray(labelToShuffle)];
+        }
+        // After relabeling, always reset the flag
+        needsRelabel = false;
     }
-
     randomButton.disabled = true;
     randomButton.textContent = 'Randomizing';
     stopTimer();
-    
     const randomDelay = (Math.floor(Math.random() * 5) + 1) * 1000;
-    
     randomizeInterval = setInterval(() => {
         problemArea.innerHTML = '';
         for (let i = 0; i < 4; i++) {
@@ -438,17 +428,15 @@ function randomizeProblem() {
             problemArea.appendChild(card);
         }
     }, 50);
-
     setTimeout(() => {
         clearInterval(randomizeInterval);
-        const problem = problems[currentProblem - 1];
+        const problem = getNextProblem();
         if (problem) {
             createProblemCards(problem);
         } else {
             clearProblemCards();
         }
         startTimer();
-
         randomButton.disabled = false;
         randomButton.textContent = 'Random';
     }, randomDelay);
