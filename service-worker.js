@@ -22,6 +22,8 @@ self.addEventListener("install", event => {
             return cache.addAll(urlsToCache);
         })
     );
+    // เพิ่ม self.skipWaiting() เพื่อให้ Service Worker ใหม่ทำงานทันที
+    self.skipWaiting();
 });
 
 // จัดการการดึงไฟล์
